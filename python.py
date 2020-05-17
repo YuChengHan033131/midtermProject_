@@ -14,21 +14,21 @@ while 1:
             for line in file:
                 s.write(bytes(line, 'UTF-8'))
                 time.sleep(.1)
-        time.sleep(1)
+        time.sleep(30)
     if "Your Best Friend" in key.decode():
         with open("Flowey_Your_Best_Friend.txt",'r+') as file:
             print("loading Flowey_Your_Best_Friend")
             for line in file:
                 s.write(bytes(line, 'UTF-8'))
                 time.sleep(.1)
-        time.sleep(1)
+        time.sleep(30)
     if "song3" in key.decode():
-        with open("song3.txt",'r+') as file:
+        with open("dog_song.txt",'r+') as file:
             print("loading song3")
             for line in file:
                 s.write(bytes(line, 'UTF-8'))
                 time.sleep(.1)
-        time.sleep(1)
+        time.sleep(30)
     else:
         print("song doesn't exist")
 s.close()

@@ -1,9 +1,19 @@
 #include "function.h"
 #include "DA7212.h"
-Serial pc(USBTX, USBRX);
+
+char *songList[4]={"Hopes and Dreams","Your Best Friend","song2","song3"};
 float sheet[500];
 int sheetCount;
 DA7212 audio;
+DigitalIn sw3 (SW3);
+bool pause=false;
+int dnn_gesture=0;
+bool dnn_pause=false;
+int song=0;
+int score=0;
+bool hit=false;
+bool taiko=false;
+
 
 void menuMotion(int pos){
   uLCD.locate(0,5);
@@ -65,6 +75,7 @@ void songMotion(int song){
 }
 void changeSong(int &song){
   songMotion(0);
+  song=0;
   while(1){
     switch(dnn_gesture){
       case 1:
@@ -92,21 +103,20 @@ void songDisplay(){
   uLCD.printf("\n----------\n");
 }
 void loadSong(){
-  while(pc.readable()){
-    pc.getc();
-  }
-  pc.printf("%s\n",songList[song]);
-  Timer _timer;
-  _timer.start();
+  pc.printf("\n");
   int i=0;
-  char buffer[10];
+  char buffer[20];
   sheetCount=0;
   uLCD.locate(0,0);
   uLCD.cls();
   uLCD.printf("current loading:\n");
   uLCD.printf("%s\n",songList[song]);
   uLCD.printf("\n----------\n");
-  while(_timer.read()<30){
+  Timer _timer;
+  _timer.start();
+  _timer.reset();
+  pc.printf("%s\n",songList[song]);
+  while(_timer.read()<30.0){
         if(pc.readable()){
             char c=pc.getc();
             if(c!='\n'){
@@ -115,12 +125,11 @@ void loadSong(){
                 i++;
             }else{
                 i=0;
-                //uLCD.printf("%f---%d\n",stof(buffer),sheet_count);
+                //uLCD.printf("\n");
+                //uLCD.printf("%f---%d\n",stof(buffer),sheetCount);
                 sheet[sheetCount]=stof(buffer);
                 sheetCount++;
             }
-        }else{
-            //uLCD.printf("pc unreadable\n");
         }
     }    
 }
@@ -163,9 +172,6 @@ void playSong(){
     playNote(sheet[i],sheet[i+1]);
   }
 }
-int score=0;
-bool hit=false;
-bool taiko=false;
 void Taiko(){
   taiko=true;
   Timer gm;
@@ -189,7 +195,54 @@ void Taiko(){
       break;
     }
   }
+  taiko=false;
 }
+void menu(){
+  pause=true;
+  int mode=0;
+  songDisplay();
+  menuMotion(0);
+  while(1){
+    switch(dnn_gesture){
+      case 1:
+      mode=(mode+4-1)%4;
+      break;
+      case 2:
+      mode=(mode+1)%4;
+      break;
+      default:
+      break;
+    }
+    dnn_gesture=3;
+    menuMotion(mode);
+    if(!sw3){
+      break;
+    }
+  }
+  uLCD.cls();
+  bool skip=false;
+  switch(mode){
+    case 0:
+    song=(song+1)%4;
+    break;
+    case 1:
+    song=(song-1+4)%4;
+    break;
+    case 2:
+    changeSong(song);
+    break;
+    default:
+    e_taiko.call(Taiko);
+    skip=true;
+    break;
+  }
+  songDisplay();
+  if(!skip){
+    loadSong();
+  }
+  pause=false;
+}
+
 
 
 

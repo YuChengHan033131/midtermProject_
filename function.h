@@ -6,11 +6,12 @@ extern uLCD_4DGL uLCD;
 extern DigitalIn sw3;
 extern int dnn_gesture;
 extern int song;
-extern char *songList[4];
 extern bool pause;
 extern int score;
 extern bool hit;
 extern bool taiko;
+extern Serial pc;
+extern EventQueue e_taiko;;
 
 void menuMotion(int pos);
 void songMotion(int song);
@@ -20,4 +21,5 @@ void loadSong();
 void playNote(float freq,float time);
 void playSong();
 void Taiko();
+void menu();
 #endif

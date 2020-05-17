@@ -127,7 +127,7 @@ void dnn() {
     //return -1;
   }
 
-  error_reporter->Report("Set up successful...\n");
+  //error_reporter->Report("Set up successful...\n");
 
   while (true) {
     if(!dnn_pause){
