@@ -163,7 +163,6 @@ void playNote(float freq,float time){
         }
       }
       audio.spk.play(waveform, kAudioTxBufferSize);
-
     }
 }
 void playSong(){
