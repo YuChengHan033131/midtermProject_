@@ -3,5 +3,5 @@
 extern int dnn_gesture;
 extern bool dnn_pause;
 void dnn();
-
+#include "mbed.h"
 #endif

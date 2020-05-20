@@ -1,7 +1,7 @@
 #include "function.h"
 #include "DA7212.h"
 
-char *songList[4]={"Hopes and Dreams","Your Best Friend","song2","song3"};
+char *songList[4]={"Hopes and Dreams","Your Best Friend","dog song","chord"};
 float sheet[500];
 int sheetCount;
 DA7212 audio;
@@ -104,6 +104,7 @@ void songDisplay(){
 }
 void loadSong(){
   pc.printf("\n");
+  wait(.5);
   int i=0;
   char buffer[20];
   sheetCount=0;
@@ -146,6 +147,7 @@ void playNote(float freq,float time){
 
     Timer t;
     t.start();
+    t.reset();
     while(t.read()<=time){
       if(taiko){
         uLCD.locate(0,5);
@@ -161,6 +163,7 @@ void playNote(float freq,float time){
         }
       }
       audio.spk.play(waveform, kAudioTxBufferSize);
+
     }
 }
 void playSong(){
@@ -191,7 +194,9 @@ void Taiko(){
       if(!skip){
         hit=false;
       }
-    }else if(pause){
+    }
+    if(!sw2.read()){
+      uLCD.printf("taiko end\n");
       break;
     }
   }
@@ -201,7 +206,6 @@ void menu(){
   pause=true;
   int mode=0;
   songDisplay();
-  menuMotion(0);
   while(1){
     switch(dnn_gesture){
       case 1:
@@ -231,16 +235,24 @@ void menu(){
     case 2:
     changeSong(song);
     break;
-    default:
-    e_taiko.call(Taiko);
+    case 3:
+    //uLCD.printf("mode taiko\n");
+    entrance.call(Taiko);
+    //uLCD.printf("mode taiko end\n");
     skip=true;
     break;
+    default:
+    uLCD.printf("mode error\n");
+    break;
   }
-  songDisplay();
   if(!skip){
     loadSong();
   }
+  songDisplay();
   pause=false;
+}
+void test(){
+  uLCD.printf("test456");
 }
 
 

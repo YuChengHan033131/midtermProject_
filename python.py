@@ -22,9 +22,16 @@ while 1:
                 s.write(bytes(line, 'UTF-8'))
                 time.sleep(.1)
         time.sleep(30)
-    if "song3" in key.decode():
+    if "dog song" in key.decode():
         with open("dog_song.txt",'r+') as file:
-            print("loading song3")
+            print("loading dog song")
+            for line in file:
+                s.write(bytes(line, 'UTF-8'))
+                time.sleep(.1)
+        time.sleep(30)
+    if "chord" in key.decode():
+        with open("chord.txt",'r+') as file:
+            print("loading chord")
             for line in file:
                 s.write(bytes(line, 'UTF-8'))
                 time.sleep(.1)
